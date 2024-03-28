@@ -1,11 +1,11 @@
 import sys
 n, m, p, c, d = map(int, sys.stdin.readline().split()) # 게임판 크기, 턴 횟수, 산타 수, 루돌프 충돌 점수, 산타 충돌 점수
 rx, ry = map(lambda x: int(x) -1, sys.stdin.readline().split())
-santas = []
+santas = [[] for _ in range(p)]
 santa_score = [0 for _ in range(p)]
 for i in range(p):
-    _, x, y = map(lambda x: int(x) -1, sys.stdin.readline().split())
-    santas.append([x, y])
+    num, x, y = map(lambda x: int(x) -1, sys.stdin.readline().split())
+    santas[num] = [x, y]
 
 dx = [-1, -1, 0, 1, 1, 1, 0, -1]
 dy = [0, 1, 1, 1, 0, -1, -1, -1]
