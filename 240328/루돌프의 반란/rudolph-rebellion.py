@@ -80,7 +80,7 @@ def check_collision(who, closest_santa, drt):
             santas[closest_santa][0] += dx[drt] * c
             santas[closest_santa][1] += dy[drt] * c
             # 기절
-            santa_health[closest_santa] += 2
+            santa_health[closest_santa] = 2
             
     else:
         if rx == santas[closest_santa][0] and ry == santas[closest_santa][1]: # 충돌함
@@ -89,7 +89,7 @@ def check_collision(who, closest_santa, drt):
             santas[closest_santa][0] += dx[drt] * d
             santas[closest_santa][1] += dy[drt] * d
             # 기절
-            santa_health[closest_santa] += 2
+            santa_health[closest_santa] = 2
             
     if not (0 <= santas[closest_santa][0] < n and 0 <= santas[closest_santa][1] < n):
         SURVIVAL -= 1
@@ -134,6 +134,7 @@ def do_santa():
         for j in range(0, 8, 2):
             if 0 <= sx + dx[j] < n and 0 <= sy + dy[j] < n and [sx + dx[j], sy + dy[j]] not in santas:
                 dst = (sx + dx[j] - rx)**2 + (sy + dy[j] - ry)**2
+                # print(f"{i} {j}여기 dst{dst} min_dst{dst} {santas}")
                 if min_dst > dst:
                     min_dst = dst
                     drt = j
@@ -147,11 +148,17 @@ def do_santa():
 
 def do_game():
     global m, p, SURVIVAL, santa_health, santa_score
+    # print(santas)
     for i in range(m):
         if SURVIVAL == 0:
             break
+        # print(i)
         do_rodolf()
+        # print(rx, ry)
+        # print(santas, santa_health, santa_score)
         do_santa()
+        # print(santas, santa_health, santa_score)
+        # print()
         for i in range(p):
             if santa_health[i] != -1:
                 santa_health[i] = max(0, santa_health[i] - 1)
