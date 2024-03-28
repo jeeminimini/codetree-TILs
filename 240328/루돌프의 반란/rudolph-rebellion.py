@@ -55,7 +55,7 @@ def interact(closest_santa, drt):
         isChanged = False
 
         for i in range(p):
-            if i != closest_santa and sx == santas[i][0] and sy == santas[i][1]:
+            if santa_health[i] != -1 and i != closest_santa and sx == santas[i][0] and sy == santas[i][1]:
                 santas[i][0] += dx[drt]
                 santas[i][1] += dy[drt]
                 sx += dx[drt]
@@ -150,16 +150,10 @@ def do_game():
     global m, p, SURVIVAL, santa_health, santa_score
     
     for i in range(m):
-        # print(f"SURVIVAL {SURVIVAL} {santa_health}")
         if santa_health.count(-1) == p:
             break
-        # print(i)
         do_rodolf()
-        # print(rx, ry)
-        # print(santas, santa_health, santa_score)
         do_santa()
-        # print(santas, santa_health, santa_score)
-        # print()
         for i in range(p):
             if santa_health[i] != -1:
                 santa_health[i] = max(0, santa_health[i] - 1)
