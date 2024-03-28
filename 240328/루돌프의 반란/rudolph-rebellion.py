@@ -148,9 +148,10 @@ def do_santa():
 
 def do_game():
     global m, p, SURVIVAL, santa_health, santa_score
-    # print(santas)
+    
     for i in range(m):
-        if SURVIVAL == 0:
+        # print(f"SURVIVAL {SURVIVAL} {santa_health}")
+        if santa_health.count(-1) == p:
             break
         # print(i)
         do_rodolf()
