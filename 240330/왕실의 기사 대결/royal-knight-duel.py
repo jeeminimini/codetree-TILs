@@ -45,7 +45,7 @@ def is_possible_to_move_knight(num, d):
         if nk <= 0:
             continue
 
-        if nr + dx[d] + nh > l or nc + dx[d] + nh > l:
+        if nr + dx[d] + nh > l or nc + dy[d] + nw > l:
             return
 
         new = []
