@@ -1,4 +1,5 @@
 import sys
+
 n, m, k = map(int, sys.stdin.readline().split())
 
 maze = []
@@ -20,6 +21,7 @@ dx = [-1, 1, 0, 0]
 dy = [0, 0, -1, 1]
 result = 0
 
+
 def move_person(num):
     global dx, dy, n, people_info, people_maze, maze, SURVIVE, EMPTY, result
 
@@ -33,7 +35,7 @@ def move_person(num):
             if min_dst > dst:
                 min_dst = dst
                 drt = i
-
+    # print(f"min_dst {min_dst} drt {drt} survive{SURVIVE} result{result}")
     if drt != -1:
         people_info[num][0] += dx[drt]
         people_info[num][1] += dy[drt]
@@ -41,12 +43,12 @@ def move_person(num):
         people_maze[nx + dx[drt]][ny + dy[drt]].append(num)
         result += 1
 
-    if min_dst == 0: # exit
+    if min_dst == 0:  # exit
         SURVIVE -= 1
         people_maze[nx + dx[drt]][ny + dy[drt]].remove(num)
         people_info[num] = [-1, -1]
 
-    # print(num, people_info[num])
+    # print(num, people_info[num], people_maze)
 
 
 def turn_maze():
@@ -67,8 +69,10 @@ def turn_maze():
             if max(max(exit[0], people_info[i][0]) - dst, 0) < max(max(exit[0], people_info[min_num][0]) - min_dst, 0):
                 min_dst = dst
                 min_num = i
-            elif max(max(exit[0], people_info[i][0]) - dst, 0) == max(max(exit[0], people_info[min_num][0]) - min_dst, 0): 
-                if max(max(exit[1], people_info[i][1]) - dst, 0) < max(max(exit[1], people_info[min_num][1]) - min_dst, 0):
+            elif max(max(exit[0], people_info[i][0]) - dst, 0) == max(max(exit[0], people_info[min_num][0]) - min_dst,
+                                                                      0):
+                if max(max(exit[1], people_info[i][1]) - dst, 0) < max(max(exit[1], people_info[min_num][1]) - min_dst,
+                                                                       0):
                     min_dst = dst
                     min_num = i
 
@@ -83,7 +87,8 @@ def turn_maze():
     t = 0
     for i in range(0, min_dst + 1):
         for j in range(0, min_dst + 1):
-            tmp_maze[sx + j][sy + min_dst - i] = max(maze[sx + i][sy + j] - 1, 0) # !!!!! [j][min_dst - i] 이거 완전 틀렸다 !!!!!
+            tmp_maze[sx + j][sy + min_dst - i] = max(maze[sx + i][sy + j] - 1,
+                                                     0)  # !!!!! [j][min_dst - i] 이거 완전 틀렸다 !!!!!
             tmp_people_maze[sx + j][sy + min_dst - i] = people_maze[sx + i][sy + j]
 
             for k in people_maze[sx + i][sy + j]:
@@ -101,6 +106,7 @@ def turn_maze():
     exit = tmp_exit
     # print(maze, people_maze, people_info, exit)
 
+
 for i in range(k):
     if SURVIVE == 0:
         break
@@ -108,9 +114,12 @@ for i in range(k):
     for j in range(m):
         if people_info[j] == [-1, -1]:
             continue
-        
+
         move_person(j)
     # 회전시켜라
+    if SURVIVE == 0:
+        break
+
     turn_maze()
     # print()
 
