@@ -117,7 +117,7 @@ def do_bomb(fx, fy, vx, vy):
 
     path = []
     for i in range(0, 8):
-        if (vx + dx[i]) % n != fx and (vy + dy[i]) % m != fy and ground[(vx + dx[i]) % n][(vy + dy[i]) % m][0] != 0:
+        if [(vx + dx[i]) % n, (vy + dy[i]) % m] != [fx, fy] and ground[(vx + dx[i]) % n][(vy + dy[i]) % m][0] != 0:
             path.append([(vx + dx[i]) % n, (vy + dy[i]) % m])
 
     real_path = path
