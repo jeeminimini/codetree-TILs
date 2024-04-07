@@ -22,20 +22,35 @@ def get_closest_basecamp(cx, cy):
     global n, m, ground, BASECAMP, CANNOT
 
     queue = deque([[cx, cy]])
-    visited = [[False for _ in range(n)] for _ in range(n)]
-    
-    basecamp = [-1, -1]
+    visited = [[0 for _ in range(n)] for _ in range(n)]
+    visited[cx][cy] = 1
+
+    mini_time = 10000
+    basecamp = [16, 16]
     while queue:
         nx, ny = queue.popleft()
-        visited[nx][ny] = True
 
         if ground[nx][ny] == BASECAMP:
-            basecamp = [nx, ny]
-            break
+            if visited[nx][ny] <= mini_time:
+                if nx < basecamp[0]:
+                    basecamp = [nx, ny]
+                    mini_time = visited[nx][ny]
+                else:
+                    if ny < basecamp[0]:
+                        basecamp = [nx, ny]
+                        mini_time = visited[nx][ny]
+
+        if visited[nx][ny] > mini_time:
+            continue
 
         for i in range(4):
-            if 0 <= nx + dx[i] < n and 0 <= ny + dy[i] < n and ground[nx + dx[i]][ny + dy[i]] != CANNOT and not visited[nx + dx[i]][ny + dy[i]]:
+            if 0 <= nx + dx[i] < n and 0 <= ny + dy[i] < n and ground[nx + dx[i]][ny + dy[i]] != CANNOT and visited[nx + dx[i]][ny + dy[i]] == 0:
                 queue.append([nx + dx[i], ny + dy[i]])
+                visited[nx + dx[i]][ny + dy[i]] = visited[nx][ny] + 1
+
+
+    # for i in range(n):
+    #     print(visited[i])
 
     return basecamp
 
