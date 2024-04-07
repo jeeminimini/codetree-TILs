@@ -91,14 +91,22 @@ def go_to_store():
 
 
 t = 0
-while ARRIVED < m:
+while ARRIVED < m and t <10:
     arrived = go_to_store()
+
+    for x, y in arrived:
+        ground[x][y] = CANNOT
 
     if t < m:
         go_to_basecamp(t)
+   
 
-    for x, y in arrived:
-        ground[x][y] == CANNOT
+    # for i in range(n):
+    #     print(ground[i])
+
+    # print(arrived, ARRIVED)
+    # print(people)
+    # print()
 
     t += 1
 
