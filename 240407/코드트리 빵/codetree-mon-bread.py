@@ -36,7 +36,7 @@ def get_closest_basecamp(cx, cy):
                     basecamp = [nx, ny]
                     mini_time = visited[nx][ny]
                 else:
-                    if ny < basecamp[0]:
+                    if ny < basecamp[1]:
                         basecamp = [nx, ny]
                         mini_time = visited[nx][ny]
 
