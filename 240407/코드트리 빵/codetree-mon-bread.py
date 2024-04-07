@@ -91,7 +91,7 @@ def go_to_store():
 
 
 t = 0
-while ARRIVED < m and t <10:
+while ARRIVED < m:
     arrived = go_to_store()
 
     for x, y in arrived:
