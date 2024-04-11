@@ -42,13 +42,15 @@ VERTICAL = 1
 DIE = [-1, -1, -1, -1]
 
 num = 1
-count = 0
-now = 0
+count = 0 # num이 2번 나오는지 확인
+now = 0 # 현재 몇번째인지 num까지 가기 위해
+typ = 0
 
 result = 0
+survival = m
 
 def do_runner():
-    global runners, center, trees, X, Y, D, DIR, dx, dy
+    global n, runners, center, trees, X, Y, D, DIR, dx, dy
 
     for i in range(m):
         # 도망자는 현재 술래와의 거리가 3 이하인 도망자만 움직임. 
@@ -86,7 +88,7 @@ def do_runner():
                     ground_runners[nx][ny].append(i)
         
 def do_center(t):
-    global runners, center, trees, X, Y, D, dx_c, dy_c, DIE, count, now, num, result
+    global n, runners, center, trees, X, Y, D, dx_c, dy_c, DIE, count, now, num, result, survival, typ
     # 술래는 처음 위 방향으로 시작해서 달팽이 모양으로 움직임.
     # 만약 끝에 도달하게 되면 다시 거꾸로 중심으로 이동. 
     # 다시 중심에 오게 되면 처음처럼 위 방향으로 시작하여 시계방향으로 도는 것을 k턴에 걸쳐 반복.
@@ -96,18 +98,38 @@ def do_center(t):
 
     center[X] += dx_c[center[D]] 
     center[Y] += dy_c[center[D]]
-    count += 1
     now += 1
 
-    if count == 2:
-        num += 1
-        count = 0
-        now = 0
-        center[D] = (center[D] + 1) % 4
-    else:
+    if center[X] == 0 and center[Y] == 0:
+        count = 1
+        typ = 1
+        center[D] = 2
+        now = 1
+    elif center[X] == n // 2 and center[Y] == n // 2:
+        count = -1
+        typ = 0
+        center[D] = 3
+        now = 1
+        
+
+    if typ == 0: #처음 시계 방향
         if now == num:
             now = 0
+            count += 1
             center[D] = (center[D] + 1) % 4
+
+        if count == 2:
+            num += 1
+            count = 0
+    else: # 거꾸로 중심으로
+        if now == num:
+            now = 0
+            count += 1
+            center[D] = (center[D] - 1) % 4
+
+        if count == 2:
+            num -= 1
+            count = 0
 
     # 이동 직후 술래는 턴을 넘기기 전 시야 내에 있는 도망자를 잡게 된다. -> 도망자 사라짐
     # 시야는 현재 바라보고 있는 방향을 기준으로 현재 칸을 포함해서 3칸.
@@ -117,12 +139,17 @@ def do_center(t):
     for i in range(3):
         nx = center[X] + dx_c[center[D]] * i
         ny = center[Y] + dy_c[center[D]] * i
+
+        if not (0 <= nx < n and 0 <= ny < n):
+            continue
+
         if trees[nx][ny] == 1:
             continue
         
         for j in ground_runners[nx][ny]:
             runners[j] = DIE
             die_num += 1
+            survival -= 1
 
         ground_runners[nx][ny] = []
 
@@ -138,11 +165,12 @@ for i in range(1, k + 1):
     # for j in range(n):
     #     print(ground_runners[j])
     do_center(i)
-    # print(center)
+    # print(center, num, count, now, center[D])
     # print(runners)
     # for j in range(n):
     #     print(ground_runners[j])
 
-    # print()
+    # if survival <= 0:  
+    #     break
 
 print(result)
