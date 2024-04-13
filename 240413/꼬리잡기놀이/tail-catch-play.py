@@ -106,12 +106,13 @@ def move():
 #    점수는 머리사람을 시작으로 K번째 사람이면 K**2 점수 얻음.
 #    공을 획득한 팀의 경우 머리사람과 꼬리사람이 바뀐다! (방향도 바뀜)
 
-def throw_ball(time):
+def throw_ball(origin_time):
     global n, ground, lines_info, team, result, FRONT
 
-    time = time % (4 * n)
+    origin_time = origin_time % (4 * n)
+    time = origin_time % n
     isOver = False
-    # print(f"time {time}")
+    # print(f"origin_time {origin_time} time {time}")
     for i in range(len(lines_info)):
         tmp = []
         if team[i][2] == FRONT:
@@ -125,9 +126,9 @@ def throw_ball(time):
             else:
                 tmp = lines_info[i][team[i][1]:] + lines_info[i][: team[i][0] + 1]
             tmp = list(reversed(tmp))
+        # print(f"tmp {tmp} {origin_time}")
 
-
-        if 0 <= time < n:
+        if 0 <= origin_time < n:
             for j in range(n):
                 for h in range(len(tmp)):
                     # print(f"1번 time {time} j {j} {tmp[h]}")
@@ -147,14 +148,15 @@ def throw_ball(time):
             if isOver:
                 break
 
-        elif n <= time < 2 * n:
-            time %= n
-
+        elif n <= origin_time < 2 * n:
+            # print(tmp, isOver)
             for j in range(n - 1, -1, -1):
                 for h in range(len(tmp)):
                     # print(f"2번 time {time} j {j} {tmp}")
                     if [j, time] == tmp[h]:
                         result += (h + 1) ** 2
+                        # print(f"result {result} {i}번째 team {j, time} {team[i]} {tmp}")
+
                         isOver = True
                         team[i][0], team[i][1] = team[i][1], team[i][0]
                         if team[i][2] == FRONT:
@@ -166,8 +168,7 @@ def throw_ball(time):
                     break
             if isOver:
                 break
-        elif 2 * n <= time < 3 * n:
-            time %= n
+        elif 2 * n <= origin_time < 3 * n:
 
             for j in range(n - 1, -1, -1):
                 for h in range(len(tmp)):
@@ -186,7 +187,6 @@ def throw_ball(time):
             if isOver:
                 break
         else:
-            time %= n
 
             for j in range(0, n,):
                 for h in range(len(tmp)):
