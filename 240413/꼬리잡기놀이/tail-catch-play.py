@@ -71,6 +71,7 @@ for i in range(n):
             end = bfs(i, j)
             team.append([0, end, FRONT])
 
+# print(lines_info)
 # 한 라운드 단계
 
 # 1. 각 팀은 머리사람을 따라서 한 칸 이동.
@@ -91,7 +92,7 @@ def move():
         team[i] = [front, end, type]
 
     # print(team)
-    # print(lines_info)
+
 
 
 # 2. 각 라운드마다 공이 정해진 선을 따라 던져진다.
@@ -110,26 +111,29 @@ def throw_ball(time):
 
     time = time % (4 * n)
     isOver = False
-
-    if 0 <= time < n - 1:
-        for i in range(len(lines_info)):
-            tmp = []
-            if team[i][2] == FRONT:
-                if team[i][0] < team[i][1]:
-                    tmp = lines_info[i][team[i][0] : team[i][1] + 1]
-                else:
-                    tmp = lines_info[i][team[i][0]: ] + lines_info[i][: team[i][1] + 1]
+    # print(f"time {time}")
+    for i in range(len(lines_info)):
+        tmp = []
+        if team[i][2] == FRONT:
+            if team[i][0] < team[i][1]:
+                tmp = lines_info[i][team[i][0]: team[i][1] + 1]
             else:
-                if team[i][0] > team[i][1]:
-                    tmp = lines_info[i][team[i][1] : team[i][0] + 1]
-                else:
-                    tmp = lines_info[i][team[i][1]: ] + lines_info[i][: team[i][0] + 1]
+                tmp = lines_info[i][team[i][0]:] + lines_info[i][: team[i][1] + 1]
+        else:
+            if team[i][0] > team[i][1]:
+                tmp = lines_info[i][team[i][1]: team[i][0] + 1]
+            else:
+                tmp = lines_info[i][team[i][1]:] + lines_info[i][: team[i][0] + 1]
+            tmp = list(reversed(tmp))
 
+
+        if 0 <= time < n:
             for j in range(n):
                 for h in range(len(tmp)):
-                    # print(f"time {time} j {j} {tmp} time {time}")
+                    # print(f"1번 time {time} j {j} {tmp[h]}")
                     if [time, j] == tmp[h]:
                         result += (h + 1) ** 2
+                        # print(f"result {result} {i}번째 team {time, j} {team[i]} {tmp}")
                         isOver = True
 
                         team[i][0], team[i][1] = team[i][1], team[i][0]
@@ -143,24 +147,12 @@ def throw_ball(time):
             if isOver:
                 break
 
-    elif n <= time < 2 * n:
-        time %= n
-
-        for i in range(len(lines_info)):
-            tmp = []
-            if team[i][2] == FRONT:
-                if team[i][0] < team[i][1]:
-                    tmp = lines_info[i][team[i][0] : team[i][1] + 1]
-                else:
-                    tmp = lines_info[i][team[i][0]: ] + lines_info[i][: team[i][1] + 1]
-            else:
-                if team[i][0] > team[i][1]:
-                    tmp = lines_info[i][team[i][1] : team[i][0] + 1]
-                else:
-                    tmp = lines_info[i][team[i][1]: ] + lines_info[i][: team[i][0] + 1]
+        elif n <= time < 2 * n:
+            time %= n
 
             for j in range(n - 1, -1, -1):
                 for h in range(len(tmp)):
+                    # print(f"2번 time {time} j {j} {tmp}")
                     if [j, time] == tmp[h]:
                         result += (h + 1) ** 2
                         isOver = True
@@ -174,24 +166,12 @@ def throw_ball(time):
                     break
             if isOver:
                 break
-    elif 2 * n <= time < 3 * n:
-        time %= n
-
-        for i in range(len(lines_info)):
-            tmp = []
-            if team[i][2] == FRONT:
-                if team[i][0] < team[i][1]:
-                    tmp = lines_info[i][team[i][0]: team[i][1] + 1]
-                else:
-                    tmp = lines_info[i][team[i][0]:] + lines_info[i][: team[i][1] + 1]
-            else:
-                if team[i][0] > team[i][1]:
-                    tmp = lines_info[i][team[i][1]: team[i][0] + 1]
-                else:
-                    tmp = lines_info[i][team[i][1]:] + lines_info[i][: team[i][0] + 1]
+        elif 2 * n <= time < 3 * n:
+            time %= n
 
             for j in range(n - 1, -1, -1):
                 for h in range(len(tmp)):
+                    # print(f"3번 time {time} j {j} {tmp}")
                     if [(n - 1) - time, j] == tmp[h]:
                         result += (h + 1) ** 2
                         isOver = True
@@ -205,24 +185,12 @@ def throw_ball(time):
                     break
             if isOver:
                 break
-    else:
-        time %= n
-
-        for i in range(len(lines_info)):
-            tmp = []
-            if team[i][2] == FRONT:
-                if team[i][0] < team[i][1]:
-                    tmp = lines_info[i][team[i][0]: team[i][1] + 1]
-                else:
-                    tmp = lines_info[i][team[i][0]:] + lines_info[i][: team[i][1] + 1]
-            else:
-                if team[i][0] > team[i][1]:
-                    tmp = lines_info[i][team[i][1]: team[i][0] + 1]
-                else:
-                    tmp = lines_info[i][team[i][1]:] + lines_info[i][: team[i][0] + 1]
+        else:
+            time %= n
 
             for j in range(0, n,):
                 for h in range(len(tmp)):
+                    # print(f"4번 time {time} j {j} {tmp}")
                     if [j, (n - 1) - time] == tmp[h]:
                         result += (h + 1) ** 2
                         isOver = True
@@ -243,3 +211,16 @@ for i in range(k):
     throw_ball(i)
 
 print(result)
+
+
+
+'''
+7 2 10
+3 2 1 0 0 0 0
+4 0 4 0 2 1 4
+4 4 4 0 2 0 4
+0 0 0 0 3 0 4
+0 0 4 4 4 0 4
+0 0 4 0 0 0 4
+0 0 4 4 4 4 4
+'''
